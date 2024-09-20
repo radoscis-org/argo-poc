@@ -19,18 +19,18 @@ spec:
       sources:
       - repoURL: https://github.com/radoscis/argo-poc/app-of-apps
         targetRevision: HEAD
-        path: {{.env}}
+        path: '{{.env}}'
         helm:
           parameters:
             - name: env
-              value: {{.env}}
+              value: '{{.env}}'
             - name: server
-              value: {{.cluster}}
+              value: '{{.cluster}}'
           valueFiles:
           - $values/{{.env}}/values.yaml
       - repoURL: https://github.com/radoscis/argo-poc/roadrunner
         targetRevision: HEAD
-        path: {{.env}}
+        path: '{{.env}}'
         ref: values      
       destination:
         server: '{{.cluster}}'
