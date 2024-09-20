@@ -4,7 +4,7 @@ metadata:
   name: argocd-roadrunner
   namespace: argocd-roadrunner-{{.Values.env}}  
   finalizers:    
-    - resources-finalizer.argocd.argoproj.io    
+    # - resources-finalizer.argocd.argoproj.io    
   labels:
     name: roadrunner
     env: {{.Values.env}}
