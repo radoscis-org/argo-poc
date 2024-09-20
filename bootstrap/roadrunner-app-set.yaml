@@ -17,9 +17,9 @@ spec:
     spec:
       project: default
       sources:
-      - repoURL: https://github.com/radoscis/argo-poc/app-of-apps
+      - repoURL: https://github.com/radoscis-org/argo-poc.git
         targetRevision: HEAD
-        path: '{{.env}}'
+        path: app-of-apps/{{.env}}
         helm:
           parameters:
             - name: env
@@ -28,9 +28,9 @@ spec:
               value: '{{.cluster}}'
           valueFiles:
           - $values/{{.env}}/values.yaml
-      - repoURL: https://github.com/radoscis/argo-poc/roadrunner
+      - repoURL: https://github.com/radoscis-org/argo-poc.git
         targetRevision: HEAD
-        path: '{{.env}}'
+        path: roadrunner/{{.env}}
         ref: values      
       destination:
         server: '{{.cluster}}'
