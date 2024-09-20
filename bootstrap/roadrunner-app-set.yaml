@@ -30,7 +30,7 @@ spec:
           - $values/{{.env}}/values.yaml
       - repoURL: https://github.com/radoscis-org/argo-poc.git
         targetRevision: main
-        path: roadrunner/{{.env}}
+        path: roadrunner
         ref: values
       destination:
         server: '{{.cluster}}'
