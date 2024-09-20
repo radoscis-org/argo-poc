@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - cluster: "https://kubernetes.default.svc"
+        env: dev      
+  template:
+    metadata:
+      name: '{{.env}}-roadrunner-apps'
+    spec:
+      project: default
+      sources:
+      - repoURL: https://github.com/radoscis/argo-poc/app-of-apps
+        targetRevision: HEAD
+        path: {{.env}}
+        helm:
+          parameters:
+            - name: env
+              values: {{.env}}
+          valueFiles:
+          - $values/{{.env}}/values.yaml
+      - repoURL: https://github.com/radoscis/argo-poc/roadrunner
+        targetRevision: HEAD
+        path: {{.env}}
+        ref: values      
+      destination:
+        server: '{{.cluster}}'
+        namespace: argocd

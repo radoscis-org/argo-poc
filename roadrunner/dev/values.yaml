@@ -1,0 +1,4 @@
+chartVersion: 1.0
+roadrunner:
+  image: nginx
+  tag: latest

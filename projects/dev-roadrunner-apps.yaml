@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev-roadrunner-apps
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  # Project description
+  description: Roadrunner project for DEV environment
+
+  sourceRepos:
+  - 'https://github.com/radoscis/argo-poc'
+
+  # Only permit applications to deploy to the guestbook namespace in the same cluster
+  # Destination clusters can be identified by 'server', 'name', or both.
+  destinations:
+  - namespace: parkmc-dev
+    server: https://kubernetes.default.svc
+    name: in-cluster
+
+  # Deny all cluster-scoped resources from being created, except for Namespace
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+
+  # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
+  namespaceResourceBlacklist:
+  - group: ''
+    kind: ResourceQuota
+  - group: ''
+    kind: LimitRange
+  - group: ''
+    kind: NetworkPolicy
+
+  # Deny all namespaced-scoped resources from being created, except for Deployment and StatefulSet
+  namespaceResourceWhitelist:
+  - group: 'apps'
+    kind: Deployment
+  - group: 'apps'
+    kind: StatefulSet  
+  - group: ''
+    kind: Configmap
+  - group: ''
+    kind: Service
+
+  # Enables namespace orphaned resource monitoring.
+  orphanedResources:
+    warn: true
+
+  roles:
+  # A role which provides read-only access to all applications in the project
+  - name: read-only
+    description: Read-only privileges to my-project
+    policies:
+    - p, proj:dev-roadrunner-apps:read-only, applications, get, dev-roadrunner-apps/*, allow
+    groups:
+    - my-oidc-group
+
+  # By default, apps may sync to any cluster specified under the `destinations` field, even if they are not
+  # scoped to this project. Set the following field to `true` to restrict apps in this cluster to only clusters
+  # scoped to this project.
+  permitOnlyProjectScopedClusters: true
+
+  # When using Applications-in-any-namespace, this field determines which namespaces this AppProject permits
+  # Applications to reside in. Details: https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/
+  sourceNamespaces:
+  - "argocd-roadrunner-dev"

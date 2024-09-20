@@ -1,0 +1,6 @@
+apiVersion: v2
+name: argocd-roadrunner-app
+description: A Helm chart for ArgoCD application for roadrunner project
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
