@@ -18,7 +18,7 @@ spec:
       project: default
       sources:
       - repoURL: https://github.com/radoscis-org/argo-poc.git
-        targetRevision: HEAD
+        targetRevision: main
         path: app-of-apps/{{.env}}
         helm:
           parameters:
@@ -29,7 +29,7 @@ spec:
           valueFiles:
           - $values/{{.env}}/values.yaml
       - repoURL: https://github.com/radoscis-org/argo-poc.git
-        targetRevision: HEAD
+        targetRevision: main
         path: roadrunner/{{.env}}
         ref: values      
       destination:
