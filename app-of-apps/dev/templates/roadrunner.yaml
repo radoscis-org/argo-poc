@@ -11,13 +11,13 @@ metadata:
 spec:  
   project: {{.Values.env}}-roadrunner-project
   source:
+    chart: roadrunner          
     repoURL: https://radoscis-org.github.io/helm-charts-poc
     targetRevision: {{ .Values.chartVersion }}
-    chart: roadrunner          
     helm:
+      releaseName: roadrunner
       valuesObject:
-        {{.Values.roadrunner | toYaml | nindent 8}}            
-      releaseName: roadrunner      
+        {{.Values.roadrunner | toYaml | nindent 8}}                  
       ignoreMissingValueFiles: false
       skipCrds: true  
   destination:

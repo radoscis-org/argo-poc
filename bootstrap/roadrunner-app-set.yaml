@@ -31,7 +31,7 @@ spec:
       - repoURL: https://github.com/radoscis-org/argo-poc.git
         targetRevision: main
         path: roadrunner/{{.env}}
-        ref: values      
+        ref: values      s
       destination:
         server: '{{.cluster}}'
-        namespace: argocd
+        namespace: 'argocd-roadrunner-{{.env}}'
