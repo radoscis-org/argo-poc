@@ -1,4 +1,7 @@
-chartVersion: 1.0
+chartVersion: 1.0.0
 roadrunner:
-  image: nginx
-  tag: latest
+  image: 
+    repository: nginx
+    tag: latest
+  labels:
+    env: dev

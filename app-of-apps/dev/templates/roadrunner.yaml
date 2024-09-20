@@ -1,37 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: roadrunner  
-  namespace: argocd-roadrunner-{{.Values.env}}
-  # Add this finalizer ONLY if you want these to cascade delete.
+  name: argocd-roadrunner
+  namespace: argocd-roadrunner-{{.Values.env}}  
   finalizers:    
     - resources-finalizer.argocd.argoproj.io    
   labels:
     name: roadrunner
     env: {{.Values.env}}
 spec:  
-  project: {{.env}}-roadrunner-project
+  project: {{.Values.env}}-roadrunner-project
   source:
-    repoURL: https://radoscis.github.io/public-helm-charts
+    repoURL: https://radoscis-org.github.io/helm-charts-poc
     targetRevision: {{ .Values.chartVersion }}
     chart: roadrunner          
     helm:
       valuesObject:
         {{.Values.roadrunner | toYaml | nindent 8}}            
-      releaseName: roadrunner
-      # Ignore locally missing valueFiles when installing Helm chart. Defaults to false
+      releaseName: roadrunner      
       ignoreMissingValueFiles: false
       skipCrds: true  
   destination:
     # cluster API URL
     server: {{ .Values.server }}    
-    namespace: roadrunner-{{.Values.env}}
-    
-  # Extra information to show in the Argo CD Application details tab
+    namespace: roadrunner-{{.Values.env}}      
   info:
     - name: 'Roadrunner Environment'
-      value: {{ .Values.env }}
-      
+      value: {{ .Values.env }}      
   # Sync policy
   syncPolicy:
     automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.

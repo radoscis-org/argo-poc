@@ -22,7 +22,9 @@ spec:
         helm:
           parameters:
             - name: env
-              values: {{.env}}
+              value: {{.env}}
+            - name: server
+              value: {{.cluster}}
           valueFiles:
           - $values/{{.env}}/values.yaml
       - repoURL: https://github.com/radoscis/argo-poc/roadrunner
