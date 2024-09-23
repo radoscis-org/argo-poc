@@ -34,3 +34,9 @@ spec:
       destination:
         server: '{{.cluster}}'
         namespace: 'argocd-roadrunner-{{.env}}'
+      syncPolicy:
+        automated: 
+          prune: true
+          selfHeal: true
+        syncOptions:     
+          - CreateNamespace=true 
