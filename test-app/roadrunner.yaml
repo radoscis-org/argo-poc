@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-argocd-roadrunner
+  namespace: argocd-roadrunner-dev
+  labels:
+    name: roadrunner
+    env: dev
+spec:  
+  project: dev-roadrunner-project
+  source:
+    chart: roadrunner          
+    repoURL: https://radoscis-org.github.io/helm-charts-poc
+    targetRevision: 1.0.0
+    helm:
+      releaseName: roadrunner      
+      ignoreMissingValueFiles: false
+      skipCrds: true  
+  destination:
+    # cluster API URL
+    server: https://kubernetes.default.svc    
+    namespace: roadrunner-dev
+  info:
+    - name: 'Roadrunner Environment'
+      value: 'dev'      
+  # Sync policy
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: false     
+    syncOptions:     # Sync options which modifies sync behavior    
+    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.          

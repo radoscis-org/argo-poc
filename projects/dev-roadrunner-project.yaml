@@ -4,29 +4,26 @@ metadata:
   name: dev-roadrunner-project
   namespace: argocd
   # Finalizer that ensures that project is not deleted until it is not referenced by any application
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  # finalizers:
+  #   - resources-finalizer.argocd.argoproj.io
 spec:
   # Project description
   description: Roadrunner project for DEV environment
 
-  sourceRepos:
+  sourceRepos:  
   - 'https://github.com/radoscis-org/argo-poc.git'
   - 'https://radoscis-org.github.io/helm-charts-poc'
-
-  # Only permit applications to deploy to the guestbook namespace in the same cluster
-  # Destination clusters can be identified by 'server', 'name', or both.
+  
   destinations:
-  - namespace: roadrunner-dev
-    server: https://kubernetes.default.svc
-    name: in-cluster
+    - server: https://kubernetes.default.svc
+      name: in-cluster
+      namespace: roadrunner-dev    
+  
 
-  # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:
   - group: ''
     kind: Namespace
 
-  # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
   namespaceResourceBlacklist:
   - group: ''
     kind: ResourceQuota
@@ -55,14 +52,14 @@ spec:
   - name: read-only
     description: Read-only privileges to my-project
     policies:
-    - p, proj:dev-roadrunner-apps:read-only, applications, get, dev-roadrunner-apps/*, allow
+    - p, proj:dev-roadrunner-project:read-only, applications, get, dev-roadrunner-project/*, allow
     groups:
     - my-oidc-group
 
   # By default, apps may sync to any cluster specified under the `destinations` field, even if they are not
   # scoped to this project. Set the following field to `true` to restrict apps in this cluster to only clusters
   # scoped to this project.
-  permitOnlyProjectScopedClusters: true
+  # permitOnlyProjectScopedClusters: true
 
   # When using Applications-in-any-namespace, this field determines which namespaces this AppProject permits
   # Applications to reside in. Details: https://argo-cd.readthedocs.io/en/stable/operator-manual/app-any-namespace/
